@@ -65,7 +65,11 @@
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
-    const sortedAlphabetically = people.sort((previous, next) => previous > next ? 1 : -1)
+    const sortedAlphabetically = people.sort((previous, next) => {
+      const [previousLast, previousFirst] = previous.split(', ')
+      const [nextLast, nextFirst] = next.split(', ')
+      return previousLast > nextLast ? 1 : -1
+    })
     console.log(sortedAlphabetically)
 
     // 8. Reduce Exercise
