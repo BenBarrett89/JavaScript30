@@ -114,7 +114,7 @@ const checkBetween = event => {
   const thisCheckbox = event.srcElement
   const checked = thisCheckbox.checked
 
-  if (!checked || lastChecked === thisCheckbox) {
+  if (!checked) {
     lastChecked = null
   } else {
 
@@ -124,7 +124,7 @@ const checkBetween = event => {
       if (lastCheckedIndex > -1) {
         const earlierIndex = lastCheckedIndex > checkedIndex ? checkedIndex : lastCheckedIndex
         const laterIndex = lastCheckedIndex > checkedIndex ? lastCheckedIndex : checkedIndex
-        checkboxes.slice(earlierIndex, laterIndex).forEach(checkbox => {
+        checkboxes.slice(earlierIndex + 1, laterIndex).forEach(checkbox => {
           checkbox.checked = true
         })
       }
