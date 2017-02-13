@@ -104,6 +104,37 @@
   </div>
 
 <script>
+const checkboxes = []
+checkboxes.push(...document.querySelectorAll('.inbox .item input'))
+
+let lastChecked
+
+const checkBetween = event => {
+  const shiftKeyDown = event.shiftKey
+  const thisCheckbox = event.srcElement
+  const checked = thisCheckbox.checked
+
+  if (!checked || lastChecked === thisCheckbox) {
+    lastChecked = null
+  } else {
+
+    if (shiftKeyDown) {
+      const lastCheckedIndex = checkboxes.findIndex(checkbox => checkbox === lastChecked)
+      const checkedIndex = checkboxes.findIndex(checkbox => checkbox === thisCheckbox)
+      if (lastCheckedIndex > -1) {
+        const earlierIndex = lastCheckedIndex > checkedIndex ? checkedIndex : lastCheckedIndex
+        const laterIndex = lastCheckedIndex > checkedIndex ? lastCheckedIndex : checkedIndex
+        checkboxes.slice(earlierIndex, laterIndex).forEach(checkbox => {
+          checkbox.checked = true
+        })
+      }
+    }
+
+    lastChecked = thisCheckbox
+  }
+}
+
+checkboxes.forEach(checkbox => checkbox.addEventListener('click', checkBetween))
 </script>
 </body>
 </html>
