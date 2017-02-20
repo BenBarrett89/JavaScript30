@@ -22,17 +22,60 @@
     <form class="add-items">
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
+      <br/>
+      <input type="button" value="Select All">
+      <input type="button" value="Unselect All">
+      <input type="button" value="Remove Selected">
     </form>
   </div>
 
 <script>
-  const addItems = document.querySelector('.add-items');
-  const itemsList = document.querySelector('.plates');
-  const items = [];
+  const addItems = document.querySelector('.add-items')
+  const itemsList = document.querySelector('.plates')
+  const items = JSON.parse(localStorage.getItem('items')) || []
+
+  const updateItems = (items, itemsList) => {
+    populateList(items, itemsList)
+    localStorage.setItem('items', JSON.stringify(items))
+  }
+
+  const addItem = (event) => {
+    event.preventDefault() // when submit is clicked, prevents the page refreshing
+    const text = (event.srcElement.querySelector('[name=item]')).value
+    const item = {
+      text,
+      done: false
+    }
+    items.push(item)
+    updateItems(items, itemsList)
+    event.srcElement.reset()
+  }
+
+  const populateList = (plates = [], platesList) => {
+    platesList.innerHTML = plates.map((plate, index) => {
+      return `
+        <li>
+          <input type="checkbox" data-index=${index} id="item${index}" ${plate.done ? 'checked' : ''} />
+          <label for="item${index}">${plate.text}</label>
+        </li>
+      `
+    }).join('')
+  }
+
+  const toggleDone = (event) => {
+    if(!event.target.matches('input')) return // filter out the label clicks
+    const index = event.target.dataset.index
+    items[index].done = !items[index].done
+    updateItems(items, itemsList)
+  }
+
+  addItems.addEventListener('submit', addItem)
+  itemsList.addEventListener('click', toggleDone)
+
+  populateList(items, itemsList)
 
 </script>
 
 
 </body>
 </html>
-
