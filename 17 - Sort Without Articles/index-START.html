@@ -51,18 +51,28 @@ const UNSORTED_PREFIXES = [
 ]
 const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog']
 
+// const removeUnsortedPrefix = (string, unsortedPrefixes) => {
+//   const array = string.split(SPACE)
+//   let firstWordUnsorted = false
+//   unsortedPrefixes.forEach(prefix => {
+//     if (prefix.toLowerCase() === array[0].toLowerCase()) {
+//       firstWordUnsorted = true
+//     }
+//   })
+//   if (firstWordUnsorted) {
+//     return array.slice(1).join(SPACE)
+//   }
+//   return array.join(SPACE)
+// }
+
+const buildRegex = (unsortedPrefixes) => {
+  const expression = unsortedPrefixes.map(prefix => prefix.toLowerCase() + SPACE).join('|')
+  return new RegExp(expression, 'i')
+}
+
 const removeUnsortedPrefix = (string, unsortedPrefixes) => {
-  const array = string.split(SPACE)
-  let firstWordUnsorted = false
-  unsortedPrefixes.forEach(prefix => {
-    if (prefix.toLowerCase() === array[0].toLowerCase()) {
-      firstWordUnsorted = true
-    }
-  })
-  if (firstWordUnsorted) {
-    return array.slice(1).join(SPACE)
-  }
-  return array.join(SPACE)
+  const regex = buildRegex(unsortedPrefixes)
+  return string.replace(regex, '').trim()
 }
 
 const sortAlphabetically = (stringArray, unsortedPrefixes) => {
