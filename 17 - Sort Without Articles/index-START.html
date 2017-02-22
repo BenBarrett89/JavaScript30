@@ -43,8 +43,49 @@
   <ul id="bands"></ul>
 
 <script>
-const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
+const SPACE = ' '
+const UNSORTED_PREFIXES = [
+  'The',
+  'A',
+  'An'
+]
+const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog']
 
+const removeUnsortedPrefix = (string, unsortedPrefixes) => {
+  const array = string.split(SPACE)
+  let firstWordUnsorted = false
+  unsortedPrefixes.forEach(prefix => {
+    if (prefix.toLowerCase() === array[0].toLowerCase()) {
+      firstWordUnsorted = true
+    }
+  })
+  if (firstWordUnsorted) {
+    return array.slice(1).join(SPACE)
+  }
+  return array.join(SPACE)
+}
+
+const sortAlphabetically = (stringArray, unsortedPrefixes) => {
+  return stringArray.sort((previousItem, nextItem) => {
+    const previousItemSort = removeUnsortedPrefix(previousItem, unsortedPrefixes)
+    const nextItemSort = removeUnsortedPrefix(nextItem, unsortedPrefixes)
+    if (previousItemSort < nextItemSort) {
+      return -1
+    }
+    return 1
+  })
+}
+
+const buildListItems = (items) => {
+  return items.map(item => {
+    return `<li>${item}</li>`
+  }).join('\n')
+}
+
+const alphabetical = sortAlphabetically(bands, UNSORTED_PREFIXES)
+const bandsUnsortedList = document.querySelector('ul#bands')
+const alphabeticalLi = buildListItems(alphabetical)
+bandsUnsortedList.innerHTML = alphabeticalLi
 
 </script>
 
